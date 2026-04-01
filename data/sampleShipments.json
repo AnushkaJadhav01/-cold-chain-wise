@@ -1,0 +1,14 @@
+[
+  {
+    "shipmentId": "CCW-001",
+    "temperature": 6,
+    "delayHours": 1,
+    "risk": "Low"
+  },
+  {
+    "shipmentId": "CCW-002",
+    "temperature": 9,
+    "delayHours": 3,
+    "risk": "High"
+  }
+]
