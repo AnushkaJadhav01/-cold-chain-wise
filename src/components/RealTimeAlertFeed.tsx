@@ -53,14 +53,29 @@ const RealTimeAlertFeed = ({ simulationActive }: Props) => {
   const { user } = useAuth();
   const [alerts, setAlerts] = useState<Alert[]>([]);
 
-  // Push a new alert to Firebase
+  // Push a new alert to Firebase (or local state in demo mode)
   const addAlert = useCallback(async () => {
-    if (!user || !simulationActive) return;
+    if (!simulationActive) return;
 
     const template = alertTemplates[Math.floor(Math.random() * alertTemplates.length)];
     const location = template.locations[Math.floor(Math.random() * template.locations.length)];
     const now = new Date();
     const timestamp = now.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+    const newAlert: Alert = {
+      id: `local-${Date.now()}`,
+      type: template.type,
+      severity: template.severity,
+      message: template.message,
+      location,
+      timestamp,
+      created_at: Date.now(),
+    };
+
+    // Demo/bypass mode: just update local state directly
+    if (!user || user.uid === "demo-user-001") {
+      setAlerts(prev => [newAlert, ...prev].slice(0, 10));
+      return;
+    }
 
     try {
       const alertsRef = ref(db, `alerts/${user.uid}`);
@@ -77,18 +92,18 @@ const RealTimeAlertFeed = ({ simulationActive }: Props) => {
     }
   }, [user, simulationActive]);
 
-  // Listen for alerts from Firebase
+  // Listen for alerts from Firebase (skip in demo mode)
   useEffect(() => {
-    if (!user) return;
+    if (!user || user.uid === "demo-user-001") return;
 
     const alertsRef = query(ref(db, `alerts/${user.uid}`), limitToLast(10));
     
     const unsubscribe = onValue(alertsRef, (snapshot) => {
       const data = snapshot.val();
       if (data) {
-        const loadedAlerts: Alert[] = Object.entries(data).map(([id, value]: [string, any]) => ({
+        const loadedAlerts: Alert[] = Object.entries(data).map(([id, value]: [string, unknown]) => ({
           id,
-          ...value,
+          ...(value as Omit<Alert, "id">),
         })).sort((a, b) => b.created_at - a.created_at);
         setAlerts(loadedAlerts);
       } else {

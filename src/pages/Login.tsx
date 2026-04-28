@@ -7,12 +7,14 @@ import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
 import { Lock, Mail, Brain } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { setDemoMode } = useAuth();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -82,7 +84,8 @@ const Login = () => {
             variant="outline" 
             className="w-full text-xs font-bold border-dashed hover:bg-primary/5 hover:text-primary transition-all"
             onClick={() => {
-              toast.success("Bypassing Authentication...");
+              setDemoMode();
+              toast.success("Demo mode activated! Entering dashboard...");
               navigate("/");
             }}
           >
