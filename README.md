@@ -2,6 +2,8 @@
 
 **Cold-Chain-Wise** (powered by GAT-RL) is a premium, AI-driven logistics optimization platform designed to eliminate vaccine and food spoilage through real-time autonomous diagnostics, predictive risk modeling, and intelligent routing.
 
+### 🌐 Live Prototype: [https://cold-chain-wise-1.onrender.com](https://cold-chain-wise-1.onrender.com)
+
 ![Dashboard Preview](hero_illustration_1774798568807.png)
 
 ---
