@@ -28,6 +28,14 @@ def gemini_explain():
 def health_check():
     return jsonify({"status": "ok", "service": "GAT-RL Backend"})
 
+@app.route('/', methods=['GET'])
+def index():
+    return jsonify({
+        "message": "Cold-Chain-Wise Backend is running!",
+        "status": "online",
+        "endpoints": ["/gemini-explain", "/health"]
+    })
+
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     app.run(debug=True, host="0.0.0.0", port=port)
