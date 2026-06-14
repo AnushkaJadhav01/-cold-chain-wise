@@ -54,42 +54,68 @@ const Index = () => {
       <Header />
 
       <main className="container py-8 space-y-8">
-        {/* Hero + Simulation Controls */}
+        {/* Cinematic 3D Hero + Simulation Controls */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: [0.23, 1, 0.32, 1] }}
-          className="relative text-center py-10 bg-gradient-hero rounded-2xl border border-border overflow-hidden"
+          className="relative w-full min-h-[450px] flex flex-col justify-center rounded-2xl border border-border overflow-hidden"
+          style={{ backgroundColor: '#060B18' }}
         >
-          {/* Subtle background decoration */}
-          <div className="absolute inset-0 overflow-hidden pointer-events-none">
-            <div className="absolute -top-20 -right-20 w-60 h-60 rounded-full bg-primary/3 blur-3xl" />
-            <div className="absolute -bottom-10 -left-10 w-40 h-40 rounded-full bg-primary/2 blur-2xl" />
-          </div>
-          <div className="relative z-10">
+          {/* Background Cinematic Image */}
+          <motion.div
+            initial={{ scale: 1.05, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 1.5, ease: "easeOut" }}
+            className="absolute inset-0 z-0 pointer-events-none"
+          >
+            <img 
+              src="/hero_scene.png" 
+              alt="Cold Chain Wise Cinematic Scene" 
+              className="w-full h-full object-cover object-center lg:object-right mix-blend-screen opacity-90" 
+            />
+            {/* Gradient overlay for readability */}
+            <div className="absolute inset-0 bg-gradient-to-r from-[#060B18] via-[#060B18]/80 to-transparent w-full lg:w-2/3"></div>
+          </motion.div>
+
+          <div className="relative z-10 px-8 py-10 lg:w-[60%] text-left">
+            <div 
+              className="inline-block px-4 py-1.5 rounded-full text-[11px] font-bold tracking-[0.2em] uppercase mb-6"
+              style={{ 
+                backgroundColor: 'rgba(29, 111, 232, 0.15)', 
+                color: '#4DCFFF', 
+                border: '1px solid rgba(77, 207, 255, 0.3)' 
+              }}
+            >
+              AI-Powered Fleet Management
+            </div>
+
             <motion.h1
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2, duration: 0.5 }}
-              className="text-4xl font-extrabold text-foreground mb-3 tracking-tight"
+              className="text-4xl lg:text-6xl font-extrabold tracking-tight leading-[1.05] mb-4 text-[#E8F4FF]"
             >
-              <span className="text-gradient-primary">GAT-RL</span> Cold Chain Intelligence
+              Cold Chain <span style={{ color: '#1D6FE8' }}>Wise</span>
             </motion.h1>
+            
             <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.4 }}
-              className="text-sm text-muted-foreground max-w-2xl mx-auto mb-6 leading-relaxed"
+              className="text-base lg:text-lg text-muted-foreground max-w-xl mb-8 leading-relaxed"
             >
-              AI-driven multi-depot cold chain routing optimization using Graph Attention Networks
-              and Reinforcement Learning to reduce spoilage, delays, and energy consumption.
+              Ensure fresh produce and critical medicines arrive with zero spoilage. Advanced route optimization using real-time subsurface temperature telemetry and Graph Attention Networks.
             </motion.p>
-            <SimulationController
-              active={simulationActive}
-              demoMode={demoMode}
-              onToggleSimulation={toggleSimulation}
-              onToggleDemo={toggleDemo}
-            />
+            
+            <div className="bg-background/20 backdrop-blur-md rounded-xl p-4 border border-white/5 inline-block w-full max-w-lg">
+              <SimulationController
+                active={simulationActive}
+                demoMode={demoMode}
+                onToggleSimulation={toggleSimulation}
+                onToggleDemo={toggleDemo}
+              />
+            </div>
           </div>
         </motion.div>
 
