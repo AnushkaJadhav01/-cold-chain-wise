@@ -1,25 +1,26 @@
 import { useState, useEffect, useRef } from "react";
+import { motion } from "framer-motion";
 import { TrendingDown, Fuel, Clock, Leaf, Brain, Apple, HeartPulse } from "lucide-react";
-import { ResponsiveContainer, AreaChart, Area } from "recharts";
+import { ResponsiveContainer, LineChart, Line } from "recharts";
 
 interface MetricsDashboardProps {
   simulationActive?: boolean;
 }
 
 const generateSparklineData = (base: number, volatility: number) => {
-  return Array.from({ length: 10 }).map((_, i) => ({
+  return Array.from({ length: 15 }, (_, i) => ({
     value: base + (Math.random() - 0.5) * volatility
   }));
 };
 
 const baseMetrics = [
-  { label: "Spoilage Reduction", value: 37.2, suffix: "%", icon: TrendingDown, color: "#00A878", delta: "+4.1% ▲", deltaColor: "text-[#00A878]" },
-  { label: "Fuel Savings", value: 12.8, suffix: "%", icon: Fuel, color: "#E8912A", delta: "+2.3% ▲", deltaColor: "text-[#00A878]" },
-  { label: "Delivery Efficiency", value: 23.5, suffix: "%", icon: Clock, color: "#1B2E6B", delta: "+1.5% ▲", deltaColor: "text-[#00A878]" },
-  { label: "Carbon Reduction", value: 18.4, suffix: "%", icon: Leaf, color: "#00A878", delta: "+3.2% ▲", deltaColor: "text-[#00A878]" },
-  { label: "AI Confidence", value: 94.7, suffix: "%", icon: Brain, color: "#2E4DA0", delta: "+0.8% ▲", deltaColor: "text-[#00A878]" },
-  { label: "Food Saved", value: 12480, suffix: " kg", icon: Apple, color: "#E8912A", delta: "+420 kg ▲", deltaColor: "text-[#00A878]" },
-  { label: "Cold Chain Health", value: 92, suffix: "/100", icon: HeartPulse, color: "#00B4D8", delta: "-2 ▼", deltaColor: "text-[#D94F3D]" },
+  { label: "Spoilage Reduction", value: 37.2, suffix: "%", icon: TrendingDown, color: "#10B981", delta: "+2.4%", data: generateSparklineData(37, 2) },
+  { label: "Fuel Savings", value: 12.8, suffix: "%", icon: Fuel, color: "#F59E0B", delta: "+1.1%", data: generateSparklineData(12, 1) },
+  { label: "Delivery Efficiency", value: 23.5, suffix: "%", icon: Clock, color: "#3B82F6", delta: "+3.5%", data: generateSparklineData(23, 2) },
+  { label: "Carbon Reduction", value: 18.4, suffix: "%", icon: Leaf, color: "#10B981", delta: "+1.8%", data: generateSparklineData(18, 1) },
+  { label: "AI Confidence", value: 94.7, suffix: "%", icon: Brain, color: "#8B5CF6", delta: "+0.2%", data: generateSparklineData(94, 0.5) },
+  { label: "Food Saved", value: 12480, suffix: "", icon: Apple, color: "#F59E0B", delta: "+120", data: generateSparklineData(12400, 100) },
+  { label: "Cold Chain Health", value: 92, suffix: "", icon: HeartPulse, color: "#06B6D4", delta: "+1", data: generateSparklineData(90, 3) },
 ];
 
 const AnimatedCounter = ({ value, suffix }: { value: number; suffix: string }) => {
@@ -31,7 +32,7 @@ const AnimatedCounter = ({ value, suffix }: { value: number; suffix: string }) =
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => { if (entry.isIntersecting) setInView(true); },
-      { threshold: 0.1 }
+      { threshold: 0.3 }
     );
     if (ref.current) observer.observe(ref.current);
     return () => observer.disconnect();
@@ -40,18 +41,15 @@ const AnimatedCounter = ({ value, suffix }: { value: number; suffix: string }) =
   useEffect(() => {
     if (!inView) return;
     const startVal = prevValue.current;
-    const duration = 900;
+    const duration = 800; // Updated to 800ms per request
     const startTime = performance.now();
     const animate = (now: number) => {
       const elapsed = now - startTime;
-      const t = Math.min(elapsed / duration, 1);
-      // ease-in-out quad
-      const eased = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 4); // ease-out
       const current = startVal + (value - startVal) * eased;
-      
       setDisplay(value >= 100 ? Math.round(current) : parseFloat(current.toFixed(1)));
-      
-      if (t < 1) requestAnimationFrame(animate);
+      if (progress < 1) requestAnimationFrame(animate);
       else prevValue.current = value;
     };
     requestAnimationFrame(animate);
@@ -62,108 +60,83 @@ const AnimatedCounter = ({ value, suffix }: { value: number; suffix: string }) =
 
 const MetricsDashboard = ({ simulationActive = false }: MetricsDashboardProps) => {
   const [metrics, setMetrics] = useState(baseMetrics);
-  const [sparklines, setSparklines] = useState<Record<string, any[]>>({});
-
-  // Initialize sparklines
-  useEffect(() => {
-    const initialSparklines: Record<string, any[]> = {};
-    metrics.forEach(m => {
-      initialSparklines[m.label] = generateSparklineData(m.value, m.value > 100 ? 500 : 5);
-    });
-    setSparklines(initialSparklines);
-  }, []);
 
   useEffect(() => {
     if (!simulationActive) return;
     const interval = setInterval(() => {
       setMetrics(prev => prev.map(m => {
-        const newValue = m.label === "Food Saved"
-          ? m.value + Math.floor(Math.random() * 50)
-          : m.label === "Cold Chain Health"
-          ? Math.min(100, Math.max(80, m.value + (Math.random() - 0.5) * 3))
-          : Math.min(99, Math.max(5, m.value + (Math.random() - 0.45) * 2));
+        let newValue = m.value;
+        if (m.label === "Food Saved") newValue = m.value + Math.floor(Math.random() * 50);
+        else if (m.label === "Cold Chain Health") newValue = Math.min(100, Math.max(80, m.value + (Math.random() - 0.5) * 3));
+        else newValue = Math.min(99, Math.max(5, m.value + (Math.random() - 0.45) * 2));
         
-        // Update sparkline
-        setSparklines(s => ({
-          ...s,
-          [m.label]: [...(s[m.label] || []).slice(1), { value: newValue }]
-        }));
-
-        return { ...m, value: newValue };
+        const newData = [...m.data.slice(1), { value: newValue }];
+        
+        return {
+          ...m,
+          value: newValue,
+          data: newData
+        };
       }));
-    }, 2000);
+    }, 4000);
     return () => clearInterval(interval);
   }, [simulationActive]);
 
   return (
-    <div className="flex overflow-x-auto gap-3 pb-2 -mx-4 px-4 scrollbar-thin scrollbar-thumb-[#CBD5E1] scrollbar-track-transparent">
-      {metrics.map((m) => {
-        const Icon = m.icon;
-        const colorWithOpacity = m.color + "20"; // 12% opacity approx
-
-        return (
-          <div
-            key={m.label}
-            className="flex-shrink-0 w-[200px]"
-            style={{
-              background: '#FFFFFF',
-              border: '1px solid #CBD5E1',
-              borderRadius: '10px',
-              borderTop: `3px solid ${m.color}`,
-              padding: '16px 18px',
-              boxShadow: '0 1px 3px rgba(0,0,0,0.07)',
-            }}
-          >
-            {/* Row 1: Icon Badge + Label */}
-            <div className="flex items-center gap-2 mb-3">
-              <div 
-                className="w-[28px] h-[28px] rounded-full flex items-center justify-center"
-                style={{ backgroundColor: colorWithOpacity, color: m.color }}
-              >
-                <Icon size={14} strokeWidth={2.5} />
-              </div>
-              <span className="text-[12px] font-medium text-[#5A6680]">
-                {m.label}
-              </span>
+    <div className="flex overflow-x-auto gap-4 pb-4 -mx-4 px-4 scrollbar-thin scrollbar-thumb-border scrollbar-track-transparent">
+      {metrics.map((m, i) => (
+        <motion.div
+          key={m.label}
+          initial={{ opacity: 0, y: 24, scale: 0.95 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 0.5, delay: i * 0.06, ease: [0.23, 1, 0.32, 1] }}
+          whileHover={{ y: -2, transition: { duration: 0.2 } }}
+          className="flex flex-col shrink-0 w-[180px] rounded-[10px] overflow-hidden"
+          style={{ 
+            background: '#27364B', 
+            border: '1px solid #374151',
+            padding: '16px 20px'
+          }}
+        >
+          <div className="flex items-center gap-2 mb-3">
+            <div 
+              className="w-6 h-6 rounded flex items-center justify-center shrink-0"
+              style={{ backgroundColor: m.color }}
+            >
+              <m.icon className="w-3.5 h-3.5 text-white" />
             </div>
-
-            {/* Row 2: Metric Value */}
-            <div className="text-[28px] font-[700] text-[#1A1A2E] leading-none mb-3">
+            <p className="text-[12px] text-[#9CA3AF] font-medium leading-tight truncate">
+              {m.label}
+            </p>
+          </div>
+          
+          <div className="mb-2">
+            <p className="text-[28px] font-semibold text-[#F9FAFB] tracking-tight leading-none">
               <AnimatedCounter value={m.value} suffix={m.suffix} />
-            </div>
+            </p>
+          </div>
 
-            {/* Row 3: Sparkline + Delta Pill */}
-            <div className="flex items-center justify-between gap-2 h-[40px]">
-              <div className="flex-1 h-full">
-                {sparklines[m.label] && (
-                  <ResponsiveContainer width="100%" height="100%">
-                    <AreaChart data={sparklines[m.label]}>
-                      <defs>
-                        <linearGradient id={`color-${m.label}`} x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%" stopColor={m.color} stopOpacity={0.2}/>
-                          <stop offset="95%" stopColor={m.color} stopOpacity={0}/>
-                        </linearGradient>
-                      </defs>
-                      <Area 
-                        type="monotone" 
-                        dataKey="value" 
-                        stroke={m.color} 
-                        strokeWidth={1.5}
-                        fillOpacity={1} 
-                        fill={`url(#color-${m.label})`} 
-                        isAnimationActive={false}
-                      />
-                    </AreaChart>
-                  </ResponsiveContainer>
-                )}
-              </div>
-              <div className={`text-[10px] font-bold px-1.5 py-0.5 rounded-sm ${m.deltaColor}`} style={{ backgroundColor: m.deltaColor.replace('text-[', '').replace(']', '') + '15' }}>
-                {m.delta}
-              </div>
+          <div className="mt-auto flex items-end justify-between h-[40px] w-full">
+            <div className="w-[60%] h-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={m.data}>
+                  <Line 
+                    type="monotone" 
+                    dataKey="value" 
+                    stroke={m.color} 
+                    strokeWidth={2} 
+                    dot={false}
+                    isAnimationActive={false}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+            <div className="text-[10px] font-medium px-1.5 py-0.5 rounded ml-2" style={{ backgroundColor: `${m.color}20`, color: m.color }}>
+              {m.delta}
             </div>
           </div>
-        );
-      })}
+        </motion.div>
+      ))}
     </div>
   );
 };

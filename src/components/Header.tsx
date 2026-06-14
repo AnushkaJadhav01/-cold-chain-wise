@@ -1,5 +1,5 @@
 import { Snowflake, LogOut } from "lucide-react";
-import { useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { auth } from "@/lib/firebase";
 import { signOut } from "firebase/auth";
@@ -13,9 +13,13 @@ interface HeaderProps {
 }
 
 const Header = ({ 
-  // keeping these props to not break parent, but not showing simulation buttons in header anymore as requested
+  simulationActive = false, 
+  demoMode = false, 
+  onToggleSimulation, 
+  onToggleDemo 
 }: HeaderProps) => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const location = useLocation();
 
   const handleLogout = async () => {
@@ -35,57 +39,70 @@ const Header = ({
   ];
 
   return (
-    <header className="h-[56px] bg-[#1B2E6B] w-full flex items-center shadow-sm z-50 sticky top-0">
-      <div className="container flex items-center justify-between">
-        {/* Left: Logo */}
-        <div className="flex items-center gap-2">
-          <Snowflake className="w-5 h-5 text-[#00B4D8]" />
-          <div className="flex items-baseline">
-            <span className="text-[#FFFFFF] text-[15px] font-[700] tracking-tight">GAT-RL</span>
-            <span className="text-[#B8C8E8] text-[13px] font-[400] ml-1.5">Cold Chain Intelligence</span>
+    <header className="border-b border-[#374151] bg-[#111827] sticky top-0 z-50 h-[56px] flex items-center px-6">
+      <div className="flex items-center justify-between w-full h-full">
+        {/* Left */}
+        <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate("/")}>
+          <Snowflake size={18} color="#3B82F6" />
+          <div className="flex items-baseline gap-1.5">
+            <span className="text-[14px] font-semibold text-white">GAT-RL</span>
+            <span className="text-[12px] text-[#9CA3AF]">Cold Chain Intelligence</span>
           </div>
         </div>
 
-        {/* Centre: Nav Pills */}
-        <nav className="hidden md:flex items-center gap-1 bg-[#162558] p-1 rounded-full border border-[#2A3F6F]">
+        {/* Centre - Nav Tabs */}
+        <nav className="flex items-center gap-6 h-full">
           {navItems.map((item) => {
-            const isActive = location.pathname === item.path || (item.path === '/' && location.pathname === '/dashboard');
+            const isActive = location.pathname === item.path || (item.name === "Dashboard" && location.pathname === "/");
             return (
-              <a
+              <button
                 key={item.name}
-                href={item.path}
-                className={`px-4 py-1.5 rounded-full text-[13px] font-medium transition-colors ${
-                  isActive 
-                    ? "bg-white text-[#1B2E6B] shadow-sm" 
-                    : "text-white/60 hover:text-white hover:bg-white/10"
+                onClick={() => navigate(item.path)}
+                className={`h-full flex items-center text-[13px] font-medium transition-colors relative ${
+                  isActive ? "text-white" : "text-[#9CA3AF] hover:text-[#D1D5DB]"
                 }`}
-                onClick={(e) => e.preventDefault()} // dummy for now, rely on standard routing if implemented
               >
                 {item.name}
-              </a>
-            )
+                {isActive && (
+                  <div className="absolute bottom-0 left-0 w-full h-[2px] bg-[#3B82F6]" />
+                )}
+              </button>
+            );
           })}
         </nav>
 
-        {/* Right: Status Badge & Logout */}
+        {/* Right */}
         <div className="flex items-center gap-4">
-          <div className="flex items-center gap-3">
-            <div className="px-2 py-0.5 bg-white text-[#1B2E6B] text-[11px] font-bold rounded">
-              v2.4
+          {onToggleSimulation && onToggleDemo && (
+            <div className="flex items-center gap-2 mr-2">
+              <button
+                onClick={onToggleSimulation}
+                className={`flex items-center gap-1.5 px-3 py-1 rounded-[8px] text-[12px] font-semibold transition-all ${
+                  simulationActive 
+                    ? "bg-[#EF4444] text-white hover:bg-[#DC2626]" 
+                    : "bg-[#2563EB] text-white hover:bg-[#1D4ED8]"
+                }`}
+              >
+                {simulationActive ? "Stop Simulation" : "Start Simulation"}
+              </button>
             </div>
-            <div className="flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-[#4ADE80] animate-pulse"></span>
-              <span className="text-[#4ADE80] text-[12px] font-medium">System Online</span>
-            </div>
-          </div>
+          )}
           
+          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-md" style={{ backgroundColor: '#27364B' }}>
+            <span className="text-[12px] text-[#9CA3AF] font-medium">GAT-RL v2.4</span>
+          </div>
+
+          <div className="flex items-center gap-1.5 pl-2 border-l border-[#374151]">
+            <span className="w-2 h-2 rounded-full bg-[#10B981] animate-pulse" />
+            <span className="text-[12px] font-medium" style={{ color: '#10B981' }}>System Online</span>
+          </div>
+
           {user && (
             <button 
               onClick={handleLogout} 
-              className="text-white/60 hover:text-white p-1 rounded transition-colors"
-              title="Logout"
+              className="ml-2 text-[#9CA3AF] hover:text-[#EF4444] transition-colors"
             >
-              <LogOut className="w-4 h-4" />
+              <LogOut size={16} />
             </button>
           )}
         </div>

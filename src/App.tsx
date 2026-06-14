@@ -28,7 +28,7 @@ const App = () => {
         <AuthProvider>
           <Toaster />
           <Sonner />
-          <BrowserRouter basename="/-cold-chain-wise/" future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+          <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
             <Routes>
               {/* Public Routes */}
 
