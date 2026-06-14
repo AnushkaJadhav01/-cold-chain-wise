@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { HashRouter, Routes, Route, Navigate } from "react-router-dom";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -28,20 +28,21 @@ const App = () => {
         <AuthProvider>
           <Toaster />
           <Sonner />
-          <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+          <HashRouter>
             <Routes>
-              {/* Public Routes */}
+              {/* Landing Page - First thing users see */}
+              <Route path="/" element={<LandingPage />} />
 
+              {/* Auth Routes */}
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
 
-              {/* Protected Routes */}
-              <Route path="/" element={<LandingPage />} />
+              {/* Dashboard - After login */}
               <Route path="/dashboard" element={<Index />} />
               <Route path="/demo" element={<Demo />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
-          </BrowserRouter>
+          </HashRouter>
         </AuthProvider>
       </TooltipProvider>
     </QueryClientProvider>
