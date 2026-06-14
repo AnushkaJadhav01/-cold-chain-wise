@@ -1,26 +1,13 @@
-import { Snowflake, LogOut } from "lucide-react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { Snowflake, Activity, Cpu, LogOut } from "lucide-react";
+import { motion } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import { auth } from "@/lib/firebase";
 import { signOut } from "firebase/auth";
+import { Button } from "./ui/button";
 import { toast } from "sonner";
 
-interface HeaderProps {
-  simulationActive?: boolean;
-  demoMode?: boolean;
-  onToggleSimulation?: () => void;
-  onToggleDemo?: () => void;
-}
-
-const Header = ({ 
-  simulationActive = false, 
-  demoMode = false, 
-  onToggleSimulation, 
-  onToggleDemo 
-}: HeaderProps) => {
+const Header = () => {
   const { user } = useAuth();
-  const navigate = useNavigate();
-  const location = useLocation();
 
   const handleLogout = async () => {
     try {
@@ -31,79 +18,49 @@ const Header = ({
     }
   };
 
-  const navItems = [
-    { name: "Dashboard", path: "/" },
-    { name: "Fleet", path: "/fleet" },
-    { name: "Analytics", path: "/analytics" },
-    { name: "Alerts", path: "/alerts" }
-  ];
-
   return (
-    <header className="border-b border-[#374151] bg-[#111827] sticky top-0 z-50 h-[56px] flex items-center px-6">
-      <div className="flex items-center justify-between w-full h-full">
-        {/* Left */}
-        <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate("/")}>
-          <Snowflake size={18} color="#3B82F6" />
-          <div className="flex items-baseline gap-1.5">
-            <span className="text-[14px] font-semibold text-white">GAT-RL</span>
-            <span className="text-[12px] text-[#9CA3AF]">Cold Chain Intelligence</span>
+    <header className="border-b border-border/50 bg-card/80 backdrop-blur-md sticky top-0 z-50">
+      <div className="container flex items-center justify-between h-16">
+        <div className="flex items-center gap-3">
+          <motion.div
+            initial={{ rotate: -180, opacity: 0 }}
+            animate={{ rotate: 0, opacity: 1 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+            className="w-10 h-10 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center glow-primary"
+          >
+            <Snowflake className="w-5 h-5 text-primary" />
+          </motion.div>
+          <div>
+            <h1 className="text-sm font-bold tracking-tight text-foreground">
+              GAT-RL <span className="text-gradient-primary">Cold Chain Intelligence</span>
+            </h1>
+            <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-widest">AI-Powered Logistics Optimization</p>
           </div>
         </div>
-
-        {/* Centre - Nav Tabs */}
-        <nav className="flex items-center gap-6 h-full">
-          {navItems.map((item) => {
-            const isActive = location.pathname === item.path || (item.name === "Dashboard" && location.pathname === "/");
-            return (
-              <button
-                key={item.name}
-                onClick={() => navigate(item.path)}
-                className={`h-full flex items-center text-[13px] font-medium transition-colors relative ${
-                  isActive ? "text-white" : "text-[#9CA3AF] hover:text-[#D1D5DB]"
-                }`}
-              >
-                {item.name}
-                {isActive && (
-                  <div className="absolute bottom-0 left-0 w-full h-[2px] bg-[#3B82F6]" />
-                )}
-              </button>
-            );
-          })}
-        </nav>
-
-        {/* Right */}
-        <div className="flex items-center gap-4">
-          {onToggleSimulation && onToggleDemo && (
-            <div className="flex items-center gap-2 mr-2">
-              <button
-                onClick={onToggleSimulation}
-                className={`flex items-center gap-1.5 px-3 py-1 rounded-[8px] text-[12px] font-semibold transition-all ${
-                  simulationActive 
-                    ? "bg-[#EF4444] text-white hover:bg-[#DC2626]" 
-                    : "bg-[#2563EB] text-white hover:bg-[#1D4ED8]"
-                }`}
-              >
-                {simulationActive ? "Stop Simulation" : "Start Simulation"}
-              </button>
-            </div>
-          )}
-          
-          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-md" style={{ backgroundColor: '#27364B' }}>
-            <span className="text-[12px] text-[#9CA3AF] font-medium">GAT-RL v2.4</span>
+        <div className="flex items-center gap-3">
+          <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-secondary border border-border">
+            <Cpu className="w-3 h-3 text-primary animate-pulse-slow" />
+            <span className="text-[10px] font-medium text-muted-foreground">GAT-RL v2.4</span>
           </div>
-
-          <div className="flex items-center gap-1.5 pl-2 border-l border-[#374151]">
-            <span className="w-2 h-2 rounded-full bg-[#10B981] animate-pulse" />
-            <span className="text-[12px] font-medium" style={{ color: '#10B981' }}>System Online</span>
-          </div>
+          <motion.div
+            animate={{ boxShadow: ["0 0 0px hsl(152 69% 45% / 0)", "0 0 12px hsl(152 69% 45% / 0.3)", "0 0 0px hsl(152 69% 45% / 0)"] }}
+            transition={{ duration: 2.5, repeat: Infinity }}
+            className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-success/10 border border-success/20"
+          >
+            <Activity className="w-3 h-3 text-success" />
+            <span className="text-xs font-medium text-success">System Online</span>
+          </motion.div>
 
           {user && (
-            <button 
+            <Button 
+              variant="ghost" 
+              size="sm" 
               onClick={handleLogout} 
-              className="ml-2 text-[#9CA3AF] hover:text-[#EF4444] transition-colors"
+              className="h-8 px-2 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
             >
-              <LogOut size={16} />
-            </button>
+              <LogOut className="w-4 h-4" />
+              <span className="ml-2 hidden sm:inline text-xs">Logout</span>
+            </Button>
           )}
         </div>
       </div>
@@ -112,3 +69,4 @@ const Header = ({
 };
 
 export default Header;
+

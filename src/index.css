@@ -6,54 +6,53 @@
 
 @layer base {
   :root {
-    --background: 221 39% 11%; /* #111827 */
-    --foreground: 210 40% 98%; /* #F9FAFB */
+    --background: 222 47% 6%;
+    --foreground: 210 40% 96%;
 
-    --card: 215 32% 22%; /* #27364B */
-    --card-foreground: 210 40% 98%; /* #F9FAFB */
+    --card: 222 47% 9%;
+    --card-foreground: 210 40% 96%;
 
-    --popover: 215 32% 22%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 222 47% 9%;
+    --popover-foreground: 210 40% 96%;
 
-    --primary: 217 91% 60%; /* #3B82F6 */
-    --primary-foreground: 210 40% 98%;
+    --primary: 187 85% 53%;
+    --primary-foreground: 222 47% 6%;
 
-    --secondary: 215 28% 17%; /* #1F2937 */
-    --secondary-foreground: 218 11% 83%; /* #D1D5DB */
+    --secondary: 222 30% 14%;
+    --secondary-foreground: 210 40% 90%;
 
-    --muted: 215 28% 17%;
-    --muted-foreground: 218 11% 65%; /* #9CA3AF */
+    --muted: 222 30% 12%;
+    --muted-foreground: 215 20% 55%;
 
-    --accent: 217 91% 60%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 187 60% 20%;
+    --accent-foreground: 187 85% 70%;
 
-    --destructive: 0 84% 60%; /* #EF4444 */
+    --destructive: 0 72% 51%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 215 19% 27%; /* #374151 */
-    --border-accent: 215 14% 34%; /* #4B5563 */
-    --input: 215 19% 27%;
-    --ring: 217 91% 60%;
+    --border: 222 30% 16%;
+    --input: 222 30% 16%;
+    --ring: 187 85% 53%;
 
     --radius: 0.75rem;
 
-    --success: 160 84% 39%; /* #10B981 */
-    --success-foreground: 160 84% 95%;
-    --warning: 38 92% 50%; /* #F59E0B */
-    --warning-foreground: 38 92% 95%;
+    --success: 152 69% 45%;
+    --success-foreground: 152 69% 90%;
+    --warning: 38 92% 50%;
+    --warning-foreground: 38 92% 90%;
     --info: 217 91% 60%;
-    --info-foreground: 217 91% 95%;
-    --purple: 258 90% 66%; /* #8B5CF6 */
-    --cyan: 189 94% 43%; /* #06B6D4 */
+    --info-foreground: 217 91% 90%;
+    --cold: 195 100% 50%;
+    --cold-glow: 195 100% 70%;
 
-    --sidebar-background: 215 28% 17%; /* #1F2937 */
-    --sidebar-foreground: 218 11% 83%; /* #D1D5DB */
-    --sidebar-primary: 217 91% 60%;
-    --sidebar-primary-foreground: 210 40% 98%;
-    --sidebar-accent: 216 31% 26%; /* #2E3F58 */
-    --sidebar-accent-foreground: 210 40% 98%;
-    --sidebar-border: 215 19% 27%; /* #374151 */
-    --sidebar-ring: 217 91% 60%;
+    --sidebar-background: 222 47% 7%;
+    --sidebar-foreground: 210 40% 90%;
+    --sidebar-primary: 187 85% 53%;
+    --sidebar-primary-foreground: 222 47% 6%;
+    --sidebar-accent: 222 30% 14%;
+    --sidebar-accent-foreground: 210 40% 90%;
+    --sidebar-border: 222 30% 16%;
+    --sidebar-ring: 187 85% 53%;
   }
 }
 
@@ -69,11 +68,11 @@
 
 @layer utilities {
   .glow-primary {
-    box-shadow: 0 0 20px hsl(217 91% 60% / 0.15), 0 0 60px hsl(217 91% 60% / 0.05);
+    box-shadow: 0 0 20px hsl(187 85% 53% / 0.15), 0 0 60px hsl(187 85% 53% / 0.05);
   }
 
   .glow-primary-strong {
-    box-shadow: 0 0 25px hsl(217 91% 60% / 0.25), 0 0 80px hsl(217 91% 60% / 0.08), inset 0 0 20px hsl(217 91% 60% / 0.03);
+    box-shadow: 0 0 25px hsl(187 85% 53% / 0.25), 0 0 80px hsl(187 85% 53% / 0.08), inset 0 0 20px hsl(187 85% 53% / 0.03);
   }
 
   .glow-success {
@@ -89,7 +88,7 @@
   }
 
   .text-gradient-primary {
-    background: linear-gradient(135deg, hsl(217 91% 60%), hsl(189 94% 65%));
+    background: linear-gradient(135deg, hsl(187 85% 53%), hsl(195 100% 70%));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -103,27 +102,27 @@
   }
 
   .bg-gradient-card {
-    background: linear-gradient(145deg, hsl(var(--card)) 0%, hsl(var(--background)) 100%);
+    background: linear-gradient(145deg, hsl(222 47% 9%) 0%, hsl(222 47% 11%) 100%);
   }
 
   .bg-gradient-card-hover {
-    background: linear-gradient(145deg, hsl(var(--sidebar-accent)) 0%, hsl(var(--card)) 100%);
+    background: linear-gradient(145deg, hsl(222 47% 10%) 0%, hsl(222 47% 13%) 100%);
   }
 
   .bg-gradient-hero {
-    background: linear-gradient(135deg, hsl(var(--background)) 0%, hsl(var(--card)) 50%, hsl(var(--primary) / 0.05) 100%);
+    background: linear-gradient(135deg, hsl(222 47% 6%) 0%, hsl(222 47% 10%) 50%, hsl(187 85% 53% / 0.05) 100%);
   }
 
   .bg-gradient-premium {
-    background: linear-gradient(135deg, hsl(var(--background)) 0%, hsl(var(--card)) 40%, hsl(var(--primary) / 0.03) 100%);
+    background: linear-gradient(135deg, hsl(222 47% 8%) 0%, hsl(222 47% 12%) 40%, hsl(187 85% 53% / 0.03) 100%);
   }
 
   .border-glow {
-    border-color: hsl(217 91% 60% / 0.2);
+    border-color: hsl(187 85% 53% / 0.2);
   }
 
   .border-glow-animated {
-    border-image: linear-gradient(135deg, hsl(217 91% 60% / 0.3), hsl(217 91% 60% / 0.05), hsl(217 91% 60% / 0.3)) 1;
+    border-image: linear-gradient(135deg, hsl(187 85% 53% / 0.3), hsl(187 85% 53% / 0.05), hsl(187 85% 53% / 0.3)) 1;
   }
 
   .animate-pulse-slow {
@@ -152,125 +151,27 @@
     @apply bg-gradient-card border border-border rounded-xl transition-all duration-300;
     &:hover {
       @apply bg-gradient-card-hover border-primary/20;
-      box-shadow: 0 0 30px hsl(217 91% 60% / 0.08), 0 8px 32px hsl(218 56% 10% / 0.5);
+      box-shadow: 0 0 30px hsl(187 85% 53% / 0.08), 0 8px 32px hsl(222 47% 6% / 0.5);
     }
   }
 
   .leaflet-container {
-    background: hsl(var(--background)) !important;
+    background: hsl(222 47% 6%) !important;
     font-family: 'Inter', sans-serif !important;
   }
 
   .leaflet-popup-content-wrapper {
-    background: hsl(var(--card)) !important;
-    border: 1px solid hsl(var(--border)) !important;
+    background: hsl(222 47% 9%) !important;
+    border: 1px solid hsl(222 30% 18%) !important;
     border-radius: 10px !important;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4) !important;
+    box-shadow: 0 8px 32px hsl(222 47% 4% / 0.6) !important;
   }
 
   .leaflet-popup-tip {
-    background: hsl(var(--card)) !important;
+    background: hsl(222 47% 9%) !important;
   }
 
   .leaflet-popup-content {
     margin: 0 !important;
   }
 }
-
-/* ==========================================================================
-   COMMAND CENTER DASHBOARD — Design System
-   ========================================================================== */
-
-/* ── Liquid Glass Panel ──────────────────────────────────────────────────── */
-.liquid-glass {
-  background: rgba(0, 0, 0, 0.50);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border: 1px solid rgba(42, 63, 111, 0.5);
-  position: relative;
-}
-
-.liquid-glass::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.055) 0%,
-    transparent 55%
-  );
-  pointer-events: none;
-  z-index: 0;
-}
-
-/* Ensure children sit above the ::before pseudo-element */
-.liquid-glass > * {
-  position: relative;
-  z-index: 1;
-}
-
-/* ── Aurora background orbs ─────────────────────────────────────────────── */
-.aurora-orb {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(90px);
-  animation: aurora-breathe 10s ease-in-out infinite;
-  pointer-events: none;
-}
-
-@keyframes aurora-breathe {
-  0%, 100% {
-    transform: scale(1) translateY(0px);
-    opacity: 0.04;
-  }
-  50% {
-    transform: scale(1.18) translateY(-24px);
-    opacity: 0.08;
-  }
-}
-
-/* ── SVG Flowing Route Paths ────────────────────────────────────────────── */
-@keyframes dash-flow {
-  from { stroke-dashoffset: 300; }
-  to   { stroke-dashoffset: 0;   }
-}
-
-/* ── Sonar Ping / Status Dot ────────────────────────────────────────────── */
-@keyframes sonar-ping {
-  0%   { transform: scale(1);   opacity: 0.7; }
-  100% { transform: scale(3.2); opacity: 0;   }
-}
-
-.animate-sonar {
-  animation: sonar-ping 2.2s ease-out infinite;
-}
-
-/* ── Skeleton Shimmer (Re-optimize loading) ─────────────────────────────── */
-@keyframes shimmer-sweep {
-  0%   { transform: translateX(-200%); }
-  100% { transform: translateX(200%);  }
-}
-
-/* ── Critical Status Pill Pulse ─────────────────────────────────────────── */
-@keyframes scramble-flash {
-  0%, 100% { opacity: 1;   }
-  50%       { opacity: 0.5; }
-}
-
-/* ── Gauge Track Base ───────────────────────────────────────────────────── */
-@keyframes gauge-draw {
-  from { stroke-dashoffset: var(--gauge-full, 200); }
-  to   { stroke-dashoffset: var(--gauge-value, 0);  }
-}
-
-
-@keyframes alert-ping {
-  0% { transform: scale(1); opacity: 0.6; }
-  100% { transform: scale(2.5); opacity: 0; }
-}
-
-.animate-alert-ping {
-  animation: alert-ping 1.5s ease-out infinite;
-}
-

@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import Header from "@/components/Header";
 import DeliveryPlanner from "@/components/DeliveryPlanner";
@@ -22,8 +21,6 @@ import PerformanceAnalytics from "@/components/PerformanceAnalytics";
 import { useSimulation } from "@/hooks/useSimulation";
 import { Brain } from "lucide-react";
 import AIAgent from "@/components/AIAgent";
-import LiveTicker from "@/components/LiveTicker";
-import FleetList from "@/components/FleetList";
 
 const sectionVariants = {
   hidden: { opacity: 0, y: 28 },
@@ -31,7 +28,6 @@ const sectionVariants = {
 };
 
 const Index = () => {
-  const navigate = useNavigate();
   const [config, setConfig] = useState({
     depot: "Nashik",
     deliveries: ["Mumbai", "Bangalore"],
@@ -55,34 +51,66 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Header 
-        simulationActive={simulationActive}
-        demoMode={demoMode}
-        onToggleSimulation={toggleSimulation}
-        onToggleDemo={toggleDemo}
-      />
+      <Header />
 
-      <main className="container py-6 space-y-6">
-        {/* Scrollable KPI Row */}
+      <main className="container py-8 space-y-8">
+        {/* Hero + Simulation Controls */}
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, ease: [0.23, 1, 0.32, 1] }}
+          className="relative text-center py-10 bg-gradient-hero rounded-2xl border border-border overflow-hidden"
+        >
+          {/* Subtle background decoration */}
+          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            <div className="absolute -top-20 -right-20 w-60 h-60 rounded-full bg-primary/3 blur-3xl" />
+            <div className="absolute -bottom-10 -left-10 w-40 h-40 rounded-full bg-primary/2 blur-2xl" />
+          </div>
+          <div className="relative z-10">
+            <motion.h1
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2, duration: 0.5 }}
+              className="text-4xl font-extrabold text-foreground mb-3 tracking-tight"
+            >
+              <span className="text-gradient-primary">GAT-RL</span> Cold Chain Intelligence
+            </motion.h1>
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.4 }}
+              className="text-sm text-muted-foreground max-w-2xl mx-auto mb-6 leading-relaxed"
+            >
+              AI-driven multi-depot cold chain routing optimization using Graph Attention Networks
+              and Reinforcement Learning to reduce spoilage, delays, and energy consumption.
+            </motion.p>
+            <SimulationController
+              active={simulationActive}
+              demoMode={demoMode}
+              onToggleSimulation={toggleSimulation}
+              onToggleDemo={toggleDemo}
+            />
+          </div>
+        </motion.div>
+
+        {/* Metrics */}
         <MetricsDashboard simulationActive={simulationActive} />
 
-        {/* Main Panel: Planner + Fleet List Sidebar (30%) + Map Panel (70%) */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+        {/* Main Panel: Planner + Map */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.2, ease: [0.23, 1, 0.32, 1] }}
-            className="lg:col-span-4 flex flex-col gap-6"
+            className="lg:col-span-4"
           >
             <DeliveryPlanner onOptimize={handleOptimize} />
-            <FleetList shipments={shipments} simulationActive={simulationActive} />
           </motion.div>
-          
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.2, ease: [0.23, 1, 0.32, 1] }}
-            className="lg:col-span-8 relative flex flex-col"
+            className="lg:col-span-8 relative"
           >
             <InteractiveMap
               depot={config.depot}
@@ -217,12 +245,9 @@ const Index = () => {
           </motion.div>
         </div>
 
-        {/* Live Ticker */}
-        <LiveTicker />
-
         {/* Footer */}
-        <footer className="text-center py-8 border-t" style={{ borderColor: '#2A3F6F' }}>
-          <p className="text-xs" style={{ color: '#475569' }}>
+        <footer className="text-center py-8 border-t border-border/50">
+          <p className="text-xs text-muted-foreground">
             GAT-RL Cold Chain Intelligence Platform • AI-Powered Logistics Optimization • Built for Enterprise Scale
           </p>
         </footer>
