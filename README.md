@@ -4,7 +4,7 @@
 
 ### *AI-Powered Fleet Management for Fresh Produce & Pharmaceuticals*
 
-[![Live Demo](https://img.shields.io/badge/🚀_Live_Demo-Render_Deployment-3B82F6?style=for-the-badge)](https://cold-chain-wise-1.onrender.com)
+[![Live Demo](https://img.shields.io/badge/🚀_Live_Demo-AnushkaJadhav01.github.io-3B82F6?style=for-the-badge)](https://anushkajadhav01.github.io/-cold-chain-wise/)
 [![GitHub](https://img.shields.io/badge/GitHub-Source_Code-1F2937?style=for-the-badge&logo=github)](https://github.com/AnushkaJadhav01/-cold-chain-wise)
 [![React](https://img.shields.io/badge/React_18-TypeScript-61DAFB?style=for-the-badge&logo=react)](https://react.dev/)
 [![Python](https://img.shields.io/badge/Python-Flask_Backend-3776AB?style=for-the-badge&logo=python)](https://flask.palletsprojects.com/)
@@ -213,7 +213,7 @@ Every push to `main` triggers the GitHub Actions workflow:
 1. `npm ci` → `npm run build` (Vite outputs to `dist/`)
 2. Deploys `dist/` to GitHub Pages
 
-**Live URL:** `https://cold-chain-wise-1.onrender.com`
+**Live URL:** `https://anushkajadhav01.github.io/-cold-chain-wise/`
 
 ### Backend (Google Cloud Run / Render)
 ```bash
