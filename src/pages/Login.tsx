@@ -22,7 +22,7 @@ const Login = () => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       toast.success("Welcome back!");
-      navigate("/");
+      navigate("/dashboard");
     } catch (error: any) {
       toast.error(error.message);
     } finally {
@@ -86,7 +86,7 @@ const Login = () => {
             onClick={() => {
               setDemoMode();
               toast.success("Demo mode activated! Entering dashboard...");
-              navigate("/");
+              navigate("/dashboard");
             }}
           >
             ⚡ BYPASS LOGIN (DEV MODE)
